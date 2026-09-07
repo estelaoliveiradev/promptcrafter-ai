@@ -10,7 +10,7 @@
 
 ---
 
-## 📦 Instalação
+## 📦 Instalação-
 
 Você pode instalar a biblioteca diretamente via `pip`:
 
