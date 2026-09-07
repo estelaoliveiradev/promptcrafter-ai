@@ -20,3 +20,10 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/estelaoliveiradev/promptcrafter-ai"
+Documentation = "https://github.com/estelaoliveiradev/promptcrafter-ai#readme"
+Repository = "https://github.com/estelaoliveiradev/promptcrafter-ai.git"
+"Issues" = "https://github.com/estelaoliveiradev/promptcrafter-ai/issues"
+"Changelog" = "https://github.com/estelaoliveiradev/promptcrafter-ai/releases"
