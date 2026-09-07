@@ -1,18 +1,18 @@
-# PromptCraft AI 🚀
+# NomeDoSeuPacote 🚀
 
-[![PyPI Version](https://img.shields.io/pypi/v/promptcraft-ai.svg?color=blue)](https://pypi.org/project/promptcraft-ai/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/promptcraft-ai.svg)](https://pypi.org/project/promptcraft-ai/)
+[![PyPI Version](https://img.shields.io/pypi/v/nome-do-seu-pacote.svg?color=blue)](https://pypi.org/project/nome-do-seu-pacote/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/nome-do-seu-pacote.svg)](https://pypi.org/project/nome-do-seu-pacote/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/nome-do-seu-pacote.svg)](https://pypi.org/project/nome-do-seu-pacote/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Downloads](https://img.shields.io/pypi/dm/promptcraft-ai)](https://pypi.org/project/promptcraft-ai/)
 
-# PromptCraft AI 🚀
+> 📦 **Disponível no PyPI:** Este projeto está publicado oficialmente no Python Package Index.  
+> Página oficial: [pypi.org/project/nome-do-seu-pacote](https://pypi.org/project/nome-do-seu-pacote/)
 
-Biblioteca Python com prompts tipados e estruturados para regras de negócio no Brasil.
+---
 
-## Instalação
+## 📦 Instalação
 
-## Exemplo de Uso
-bash
-```
-pip install promptcraft-ai
-```
+Você pode instalar a biblioteca diretamente via `pip`:
+
+```bash
+pip install nome-do-seu-pacote
