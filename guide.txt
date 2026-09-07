@@ -1,0 +1,17 @@
+promptcraft-ai/
+├── src/
+│   └── promptcraft/
+│       ├── __init__.py
+│       ├── core/
+│       │   ├── __init__.py
+│       │   └── providers.py
+│       └── finance/
+│           ├── __init__.py
+│           ├── models.py
+│           └── invoice_parser.py
+├── tests/
+│   ├── conftest.py
+│   └── test_invoice_parser.py
+├── pyproject.toml
+├── README.md
+└── LICENSE
