@@ -2,12 +2,13 @@ import os
 import time
 from abc import ABC, abstractmethod
 from typing import Optional
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from google import genai
 from google.genai import types
 from google.genai.errors import APIError
 
-load_dotenv()
+# Procura o arquivo .env recursivamente na pasta atual e diretórios superiores
+load_dotenv(find_dotenv(usecwd=True))
 
 class BaseProvider(ABC):
     @abstractmethod
@@ -17,9 +18,21 @@ class BaseProvider(ABC):
 
 class GeminiProvider(BaseProvider):
     def __init__(self, api_key: Optional[str] = None, model: str = "gemini-flash-latest"):
+        # Se ainda não encontrou, tenta buscar especificamente no diretório atual de execução
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+        
         if not self.api_key:
-            raise ValueError("GEMINI_API_KEY não encontrada no .env")
+            # Fallback explícito para tentar achar no diretório de execução atual
+            caminho_local_env = os.path.join(os.getcwd(), ".env")
+            if os.path.exists(caminho_local_env):
+                load_dotenv(caminho_local_env)
+                self.api_key = os.getenv("GEMINI_API_KEY")
+
+        if not self.api_key:
+            raise ValueError(
+                "GEMINI_API_KEY não encontrada. Certifique-se de definir a variável de ambiente, "
+                "ter um arquivo .env no projeto ou passar api_key='...' explicitamente."
+            )
         
         self.client = genai.Client(api_key=self.api_key)
         self.model_name = model
@@ -45,12 +58,11 @@ class GeminiProvider(BaseProvider):
                 return response.text
 
             except Exception as e:
-                # Verifica se o erro é 503 ou sobrecarga de servidor
                 eh_503 = "503" in str(e) or "overloaded" in str(e).lower()
                 
                 if eh_503 and tentativa < max_tentativas:
                     print(f"⚠️ Servidor do Gemini ocupado (503). Tentando novamente em {espera}s (tentativa {tentativa}/{max_tentativas})...")
                     time.sleep(espera)
-                    espera *= 2  # dobra o tempo de espera (2s -> 4s)
+                    espera *= 2
                 else:
                     raise e
