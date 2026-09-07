@@ -3,13 +3,13 @@ name: Publicar no PyPI
 on:
   release:
     types: [published]
+  workflow_dispatch: # Permite rodar manualmente pelo botão no GitHub se precisar testar
 
 jobs:
   pypi-publish:
     name: Upload para o PyPI
     runs-on: ubuntu-latest
     permissions:
-      # Permissão necessária para o Trusted Publishing (OIDC) funcionar sem token!
       id-token: write
 
     steps:
