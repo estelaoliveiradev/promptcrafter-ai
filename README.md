@@ -1,4 +1,4 @@
-# PromptCrafter AI 🚀
+# PromptCraft_AI 🚀
 
 [![PyPI Version](https://img.shields.io/pypi/v/promptcraft-ai.svg?color=blue)](https://pypi.org/project/promptcraft-ai/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/promptcraft-ai.svg)](https://pypi.org/project/promptcraft-ai/)
