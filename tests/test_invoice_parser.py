@@ -1,6 +1,6 @@
 import pytest
-from src.promptcraft.finance.invoice_parser import InvoiceParser
-from src.promptcraft.finance.models import InvoiceData
+from promptcraft.finance.invoice_parser import InvoiceParser
+from promptcraft.finance.models import InvoiceData
 from tests.conftest import MockLLMProvider
 
 def test_invoice_parser_sucesso_completo():
