@@ -76,9 +76,24 @@ class TestGetProvider:
         monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
         monkeypatch.delenv("GROQ_API_KEY", raising=False)
 
-        with patch("openai.OpenAI"):
+        mock_openai_module = MagicMock()
+        with patch.dict("sys.modules", {"openai": mock_openai_module}):
             provider = get_provider()
             assert isinstance(provider, OpenAIProvider)
+
+    def test_openai_missing_package_raises_import_error(self, monkeypatch):
+        monkeypatch.setenv("OPENAI_API_KEY", "dummy-openai-key")
+        with patch.dict("sys.modules", {"openai": None}):
+            with pytest.raises(ImportError) as exc:
+                OpenAIProvider()
+            assert "pip install openai" in str(exc.value)
+
+    def test_anthropic_missing_package_raises_import_error(self, monkeypatch):
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "dummy-anthropic-key")
+        with patch.dict("sys.modules", {"anthropic": None}):
+            with pytest.raises(ImportError) as exc:
+                AnthropicProvider()
+            assert "pip install anthropic" in str(exc.value)
 
     def test_autodetect_none_configured_raises(self, monkeypatch):
         monkeypatch.delenv("GEMINI_API_KEY", raising=False)
