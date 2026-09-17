@@ -8,7 +8,7 @@ Prompts de IA tipados e prontos para casos de uso de negócio no Brasil, totalme
 
 ---
 
-## 📦 Instalação
+## 📦 Instalação-
 
 ### Instalação Básica (com suporte a Gemini e Ollama):
 ```bash
