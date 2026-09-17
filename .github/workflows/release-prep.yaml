@@ -1,0 +1,69 @@
+name: Pipeline - Develop para Release e Main
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "release/**"
+  push:
+    branches:
+      - main
+      - "release/**"
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  validate-and-test:
+    name: Auditoria e Testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,all]"
+
+      - name: Executar testes rigorosos
+        run: |
+          pytest -v
+
+  build-and-artifact:
+    name: Compilação e Artefatos de Release
+    needs: validate-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar ferramentas de build e validação
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Gerar build da distribuição (.whl e .tar.gz)
+        run: python -m build
+
+      - name: Validar pacotes com Twine
+        run: twine check dist/*
+
+      - name: Salvar artefatos de distribuição (Wheel e Tarball)
+        uses: actions/upload-artifact@v4
+        with:
+          name: promptcraft-ai-dist
+          path: dist/
+          retention-days: 14
