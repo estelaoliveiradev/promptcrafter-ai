@@ -1,12 +1,30 @@
 import json
-from typing import Optional
-from promptcraft.core.providers import BaseProvider, GeminiProvider
+from typing import Optional, Union, Any
+from promptcraft.core.providers import BaseProvider, get_provider
+from promptcraft.core.utils import clean_json_output
 from promptcraft.finance.models import InvoiceData
 
+
 class InvoiceParser:
-    def __init__(self, provider: Optional[BaseProvider] = None):
-        # Se o usuário não passar nada, assume o Gemini por padrão
-        self.provider = provider or GeminiProvider()
+    """
+    Parser especializado na extração de dados fiscais e contábeis brasileiros
+    (Nota Fiscal, Cupom Fiscal, Danfe, NFC-e) a partir de texto extraído via OCR.
+    Compatível com múltiplos provedores de LLM (Gemini, OpenAI, Claude, Ollama, etc.).
+    """
+
+    def __init__(
+        self,
+        provider: Optional[Union[BaseProvider, str]] = None,
+        **provider_kwargs: Any,
+    ):
+        """
+        Inicializa o InvoiceParser.
+
+        :param provider: Instância de BaseProvider, nome do provedor ('gemini', 'openai', 'anthropic', 'ollama', etc.),
+                         ou None para detecção automática de variáveis de ambiente no .env.
+        :param provider_kwargs: Argumentos adicionais repassados para a inicialização do provedor (ex: model, api_key).
+        """
+        self.provider: BaseProvider = get_provider(provider, **provider_kwargs)
 
     def parse(self, ocr_text: str) -> InvoiceData:
         system_prompt = (
@@ -31,9 +49,10 @@ Campos a extrair:
 - chave_acesso: 44 números sequenciais se constar no texto (string ou null).
 """
         raw_output = self.provider.generate(prompt=user_prompt, system_prompt=system_prompt)
-        
+
         try:
-            data_dict = json.loads(raw_output)
+            cleaned_output = clean_json_output(raw_output)
+            data_dict = json.loads(cleaned_output)
             return InvoiceData(**data_dict)
         except (json.JSONDecodeError, ValueError) as err:
-            raise ValueError(f"Falha ao validar resposta do Gemini. Saída bruta: {raw_output}") from err
+            raise ValueError(f"Falha ao validar resposta da LLM. Saída bruta: {raw_output}") from err
